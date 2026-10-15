@@ -16,8 +16,16 @@ import Cart from "./pages/Cart";
 import Contact from "./pages/Contact";
 
 import "./App.css";
+import { loadProducts } from "./data/products";
 
 function App() {
+    const [excelProducts, setExcelProducts] = useState([]);
+
+  useEffect(() => {
+    loadProducts().then((data) => {
+      setExcelProducts(data);
+    });
+  }, []);
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem("medicalStoreCart");
 
@@ -64,7 +72,7 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<Home />}
+          element={<Home products={excelProducts} />}
         />
 
         <Route
@@ -74,16 +82,17 @@ function App() {
 
         <Route
           path="/products"
-          element={<Products />}
+          element={<Products products={excelProducts} />}
         />
 
         <Route
           path="/product/:id"
-          element={
+           element={
             <ProductDetails
+              products={excelProducts}
               addToCart={addToCart}
-            />
-          }
+           />
+           }
         />
 
         <Route

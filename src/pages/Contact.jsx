@@ -45,10 +45,22 @@ function Contact({ cart }) {
         className="selected-contact-item"
         key={product.id}
       >
-        <img
-          src={product.image}
-          alt={product.name}
-        />
+        
+<img
+  src={
+    product.image
+      ? product.image.startsWith("/med/")
+        ? product.image
+        : product.image.startsWith("/")
+          ? `/med${product.image}`
+          : `/med/images/${product.image}`
+      : ""
+  }
+  alt={product.name}
+  onError={(event) => {
+    event.currentTarget.style.visibility = "hidden";
+  }}
+/>
 
         <div>
           <h3>{product.name}</h3>
@@ -88,12 +100,25 @@ function Contact({ cart }) {
 
           <div className="contact-action-buttons">
 
-  <a
-    href="tel:+917676610216"
-    className="call-btn"
-  >
-    📞 Call Store
-  </a>
+  
+
+<a
+  href="tel:+917676610216"
+  className="call-btn"
+  onClick={(event) => {
+    if (!/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent)) {
+      event.preventDefault();
+      window.prompt(
+        "Call the store at this number:",
+        "+91 76766 10216"
+      );
+    }
+  }}
+>
+  📞 Call Store
+</a>
+
+
 
   <a
     href="mailto:rafatkousar2003@gmail.com?subject=Medicine%20Enquiry"

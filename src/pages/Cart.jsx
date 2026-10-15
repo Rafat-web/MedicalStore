@@ -1,7 +1,22 @@
+
 import { useNavigate } from "react-router-dom";
 
 function Cart({ cart, removeFromCart }) {
   const navigate = useNavigate();
+
+  const getImagePath = (image) => {
+    if (!image) return "";
+
+    if (image.startsWith("/med/")) {
+      return image;
+    }
+
+    if (image.startsWith("/")) {
+      return `/med${image}`;
+    }
+
+    return `/med/images/${image}`;
+  };
 
   return (
     <div className="cart-page">
@@ -27,20 +42,29 @@ function Cart({ cart, removeFromCart }) {
                 className="cart-item"
                 key={product.id}
               >
-                <img
-                  src={product.image}
-                  alt={product.name}
-                />
+                {product.image && (
+                  <img
+                    src={getImagePath(product.image)}
+                    alt={product.name}
+                    onError={(event) => {
+                      event.currentTarget.style.visibility =
+                        "hidden";
+                    }}
+                  />
+                )}
 
                 <div className="cart-item-info">
                   <h2>{product.name}</h2>
 
-                  <p className="cart-category">
-                    {product.category}
-                  </p>
+                  {product.category && (
+                    <p className="cart-category">
+                      {product.category}
+                    </p>
+                  )}
 
                   <p>
-                    {product.shortDescription}
+                    {product.shortDescription ||
+                      product.description}
                   </p>
                 </div>
 
